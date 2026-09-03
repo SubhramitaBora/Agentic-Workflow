@@ -1,0 +1,227 @@
+{
+  "name": "06-GitHub-MCP-Server",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "bearerAuth",
+        "path": "github-mcp",
+        "instructions": "GitHub operations server for AI Infrastructure Operations.\nProvides tools to inspect repositories, issues, pull requests, branches, commits, and repository information."
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7b776b7e-75a5-4b45-b2ea-727d367b5f3a",
+      "name": "MCP Server Trigger",
+      "webhookId": "117e3b2f-f8ae-40bb-a8f8-aaab93e97ac1",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "pJJnmU5jtm3CWWuy",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/SubhramitaBora",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Agentic-Workflow",
+          "mode": "list",
+          "cachedResultName": "Agentic-Workflow",
+          "cachedResultUrl": "https://github.com/SubhramitaBora/Agentic-Workflow"
+        },
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "body": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Body', ``, 'string') }}",
+        "labels": [],
+        "assignees": []
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        128
+      ],
+      "id": "106d3ea4-f1f5-4f1b-bed7-cce485731f6d",
+      "name": "Create an issue in GitHub",
+      "webhookId": "d0b222cd-8abf-4ff2-a6d4-90b2dbdffeaa",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "piTQX3Ld7uDvi1fw",
+          "name": "GitHub account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "pullRequest",
+        "operation": "get",
+        "pullRequestNumber": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('PR_Number', `Retrieve a specific pull request from the GitHub repository.\n\nRepository:\nhttps://github.com/SubhramitaBora/Agentic-Workflow\n\nUse this tool when the user asks to retrieve, inspect, or check a pull request.\n\nThe repository owner is SubhramitaBora.\nThe repository name is Agentic-Workflow.\n\nThe PR Number parameter must contain the numeric pull request number only.\nFor example, if the user asks for pull request #6, set PR Number to 6.\n\nDo not ask the user for the repository owner because the repository is already configured as SubhramitaBora/Agentic-Workflow.`, 'number') }}",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/SubhramitaBora",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Agentic-Workflow",
+          "mode": "list",
+          "cachedResultName": "Agentic-Workflow",
+          "cachedResultUrl": "https://github.com/SubhramitaBora/Agentic-Workflow"
+        }
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        208
+      ],
+      "id": "12cbd732-5815-4a62-8254-5437673dc564",
+      "name": "Get a pull request in GitHub",
+      "webhookId": "59262641-eeb6-4246-8af6-2176990846e4",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "piTQX3Ld7uDvi1fw",
+          "name": "GitHub account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "repository",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/SubhramitaBora",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Agentic-Workflow",
+          "mode": "list",
+          "cachedResultName": "Agentic-Workflow",
+          "cachedResultUrl": "https://github.com/SubhramitaBora/Agentic-Workflow"
+        }
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        384,
+        160
+      ],
+      "id": "b62afae9-7af9-49f1-9ca5-2265ea2e2c52",
+      "name": "Get a repository in GitHub",
+      "webhookId": "3f081450-e7d3-43af-b04e-c34520e21129",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "piTQX3Ld7uDvi1fw",
+          "name": "GitHub account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "get",
+        "owner": {
+          "__rl": true,
+          "value": "https://github.com/SubhramitaBora",
+          "mode": "url"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Agentic-Workflow",
+          "mode": "list",
+          "cachedResultName": "Agentic-Workflow",
+          "cachedResultUrl": "https://github.com/SubhramitaBora/Agentic-Workflow"
+        },
+        "issueNumber": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Issue_Number', `The issue state to retrieve, such as open, closed, or all.`, 'number') }}"
+      },
+      "type": "n8n-nodes-base.githubTool",
+      "typeVersion": 1.1,
+      "position": [
+        48,
+        192
+      ],
+      "id": "d7a6313c-2c69-4110-9413-cf4f4832052d",
+      "name": "Get an issue in GitHub",
+      "webhookId": "763bfc0b-add3-4e1f-963d-d67b29f800a7",
+      "credentials": {
+        "githubOAuth2Api": {
+          "id": "piTQX3Ld7uDvi1fw",
+          "name": "GitHub account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Create an issue in GitHub": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a pull request in GitHub": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a repository in GitHub": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an issue in GitHub": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "2c2db8e5-fb3a-4ac2-8b6e-79923f2da466",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41f96d952a9343c8f6bfb437d9fdf277bf5e9481e8f86e5d2a89fb987e21f5a0"
+  },
+  "nodeGroups": [],
+  "id": "TteAFpIzV3wfpTi6",
+  "tags": []
+}

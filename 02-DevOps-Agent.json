@@ -1,0 +1,208 @@
+{
+  "name": "02-DevOps-Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "=define",
+        "text": "={{ $json.request }}",
+        "options": {
+          "systemMessage": "You are the DevOps Agent for the AI Infrastructure Operations system.\n\nYour responsibility is to understand infrastructure and DevOps requests and coordinate the appropriate specialized agent.\n\nYou can handle requests involving:\n- Infrastructure and service issues\n- Jira issues\n- ML/LLM infrastructure\n- Monitoring and system health\n- GitHub repositories, issues, and pull requests\n\nWhen a request is received:\n1. Understand the user's problem.\n2. Determine which specialized agent should handle it.\n3. Delegate the task to the appropriate agent.\n4. Combine relevant results when multiple systems are involved.\n5. Give the user a clear summary and recommended next action.\n\nDo not invent infrastructure, Jira, GitHub, or MLX information.\nUse available agents and tools when information is required. assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "1f56ed6f-c07c-45f8-b7f5-fb13551a6d04",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool for Jira-related operations such as creating, retrieving, and investigating Jira issues. Delegate the request to the Jira Agent when the task requires Jira.",
+        "workflowId": {
+          "__rl": true,
+          "value": "TEQ0ARkiVIoHebhY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/TEQ0ARkiVIoHebhY",
+          "cachedResultName": "AI Infrastructure Operations — 03-Jira-Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "request": "={{ $json.request }}"
+          },
+          "matchingColumns": [
+            "request"
+          ],
+          "schema": [
+            {
+              "id": "request",
+              "displayName": "request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        128
+      ],
+      "id": "09739b81-227b-4435-9f03-6646442af41a",
+      "name": "Call '03-Jira-Agent'"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "request"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3b4e8f00-9b1a-45fe-9561-9a3219539118",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.8-27b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        112,
+        176
+      ],
+      "id": "d3d63cb9-6415-4a64-9a89-100ce2688b0a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "HBIJnwe9G3brLbSU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Use this tool for GitHub-related operations.\n\nCall this tool when the user wants to:\n- Create a GitHub issue\n- Get or inspect a GitHub issue\n- Get repository information\n- Get a pull request\n- Perform other GitHub-related operations\n\nPass the complete user's GitHub request to the GitHub Agent so it can select and execute the appropriate GitHub MCP tool.",
+        "workflowId": {
+          "__rl": true,
+          "value": "9Jt96YKY0ZCf9Ora",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/9Jt96YKY0ZCf9Ora",
+          "cachedResultName": "AI Infrastructure Operations — 10-GitHub-Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "request": "={{ $json.request }}"
+          },
+          "matchingColumns": [
+            "request"
+          ],
+          "schema": [
+            {
+              "id": "request",
+              "displayName": "request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        208
+      ],
+      "id": "d598a937-6181-435f-96b5-a3b8ab63bc5b",
+      "name": "Call '10-GitHub-Agent'"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Call '03-Jira-Agent'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '10-GitHub-Agent'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "4ee00d50-d4a9-4c54-8673-4cccd58b16e0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41f96d952a9343c8f6bfb437d9fdf277bf5e9481e8f86e5d2a89fb987e21f5a0"
+  },
+  "nodeGroups": [],
+  "id": "iNzc2uB80ck3MyJR",
+  "tags": []
+}

@@ -1,0 +1,125 @@
+{
+  "name": "07-GitHub-Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "request"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "efe5bd03-e1c5-4357-a8cb-f63fe35e9312",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.6-27b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        48,
+        224
+      ],
+      "id": "d9052268-318c-4310-9ca3-04bb227737e6",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "HBIJnwe9G3brLbSU",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/mcp-gateway",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        416,
+        256
+      ],
+      "id": "c94fad44-86b4-443f-8ca0-8d96659cbc63",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.request }}",
+        "options": {
+          "systemMessage": "You are the GitHub Agent for the AI Infrastructure Operations system.\n\nYour job is to perform GitHub operations requested by the DevOps Agent using the available GitHub MCP tools.\n\nDefault repository:\nSubhramitaBora/Agentic-Workflow\n\nIMPORTANT:\n- Always use the full repository owner and repository name: SubhramitaBora/Agentic-Workflow.\n- Do not use only \"Agentic-Workflow\" when calling GitHub tools.\n- Use the appropriate GitHub MCP tool based on the user's request.\n- For creating an issue, use the Create an issue in GitHub tool.\n- For retrieving an issue, use the Get an issue in GitHub tool.\n- For retrieving a pull request, use the Get a pull request in GitHub tool.\n- For repository information, use the Get a repository in GitHub tool.\n- Do not ask the user for the repository owner unless a different repository is explicitly requested.\n- Do not claim an operation succeeded unless the GitHub MCP tool confirms success."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        48
+      ],
+      "id": "8d6c1928-4150-4d80-bb5c-227285005bd2",
+      "name": "AI Agent"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "a02c9454-6ed2-4f2a-87b7-d04aa82e587b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41f96d952a9343c8f6bfb437d9fdf277bf5e9481e8f86e5d2a89fb987e21f5a0"
+  },
+  "nodeGroups": [],
+  "id": "9Jt96YKY0ZCf9Ora",
+  "tags": []
+}

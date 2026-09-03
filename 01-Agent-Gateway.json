@@ -1,0 +1,152 @@
+{
+  "name": "01-Agent-Gateway",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agent-gateway",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f6069ea7-03bf-4753-ab62-4ca399440e49",
+      "name": "Webhook",
+      "webhookId": "10dff040-63c8-4fb0-9a9d-0634381b6bd7"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.request }}",
+        "options": {
+          "systemMessage": "You are the Agent Gateway for an AI Infrastructure Operations system.\n\nYour job is to understand incoming user requests and route them to the appropriate specialized agent.\n\nAvailable agents:\n- DevOps Agent: handles infrastructure and general DevOps requests and can coordinate specialized agents.\n- Jira Agent: handles Jira-related requests.\n- MLX Agent: handles MLX and ML/LLM infrastructure requests.\n\nRoute each request to the most appropriate agent.\nDo not perform the task yourself when it should be handled by a specialized agent.\nDo not invent information."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "b093609e-a90e-4dfa-a958-0726bacac816",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool for infrastructure and DevOps requests. Delegate the complete user request to the DevOps Agent, which can coordinate the Jira and MLX specialized agents.",
+        "workflowId": {
+          "__rl": true,
+          "value": "iNzc2uB80ck3MyJR",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/iNzc2uB80ck3MyJR",
+          "cachedResultName": "AI Infrastructure Operations — 02-DevOps-Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "request": "={{ $json.body.request }}"
+          },
+          "matchingColumns": [
+            "request"
+          ],
+          "schema": [
+            {
+              "id": "request",
+              "displayName": "request",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        160
+      ],
+      "id": "559947de-6bfd-449e-a1e7-da1917353d9d",
+      "name": "Call '02-DevOps-Agent'"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.8-27b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        176,
+        208
+      ],
+      "id": "14840655-7eb5-4f07-9664-48eb767ee12a",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "HBIJnwe9G3brLbSU",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call '02-DevOps-Agent'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "e8b15448-f395-4e5f-b34a-f31c890b93ba",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41f96d952a9343c8f6bfb437d9fdf277bf5e9481e8f86e5d2a89fb987e21f5a0"
+  },
+  "nodeGroups": [],
+  "id": "cVL0eHQrCT2i3X4m",
+  "tags": []
+}

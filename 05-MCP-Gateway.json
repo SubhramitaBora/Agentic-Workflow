@@ -1,0 +1,463 @@
+{
+  "name": "05-MCP-Gateway",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.server }}",
+                    "rightValue": "jira",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "7d168aed-5421-48d2-98fd-99894780190c"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "30108aee-e4a1-45a3-9c0d-a63fa6fd3dfd",
+                    "leftValue": "={{ $json.body.server }}",
+                    "rightValue": "monitoring",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "8c1ae6b3-82c5-4482-8817-5b556538a8bd",
+                    "leftValue": "={{ $json.body.server }}",
+                    "rightValue": "github",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b5f79233-dba2-4c49-9736-3d458172a41f",
+                    "leftValue": "={{ $json.body.server }}",
+                    "rightValue": "mlx",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        -32
+      ],
+      "id": "40f5e4b2-2c04-40c6-9d17-03a12d073a75",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/monitoring-mcp",
+        "tool": {
+          "__rl": true,
+          "value": "Call_n8n_Workflow_Tool",
+          "mode": "list",
+          "cachedResultName": "Call_n8n_Workflow_Tool"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "input": "={{ $json.request }}"
+          },
+          "matchingColumns": [
+            "input"
+          ],
+          "schema": [
+            {
+              "id": "input",
+              "displayName": "input",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        -80
+      ],
+      "id": "516b89ec-ceba-47fc-a68b-965c8e7d8178",
+      "name": "monitoring"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/Jira",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "mode": "list",
+          "value": "Create_an_issue_in_Jira_Software"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Description": "={{ $json.body.description }}",
+            "Summary": "={{ $('Webhook').item.json.body.summary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        -192
+      ],
+      "id": "7728e623-8ebb-48e8-85c5-c7364a1e738b",
+      "name": "Jira",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "pJJnmU5jtm3CWWuy",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/github-mcp",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "value": "Get_an_issue_in_GitHub",
+          "mode": "list",
+          "cachedResultName": "Get_an_issue_in_GitHub"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Issue_Number": 2
+          },
+          "matchingColumns": [
+            "Issue_Number"
+          ],
+          "schema": [
+            {
+              "id": "Issue_Number",
+              "displayName": "Issue_Number",
+              "defaultMatch": false,
+              "required": true,
+              "display": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        528,
+        48
+      ],
+      "id": "5c7cce45-b115-46d7-b1ca-258dca4adab7",
+      "name": "Github",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "pJJnmU5jtm3CWWuy",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/MLX-MCP",
+        "authentication": "bearerAuth",
+        "tool": {
+          "__rl": true,
+          "value": "Call_n8n_Workflow_Tool",
+          "mode": "list",
+          "cachedResultName": "Call_n8n_Workflow_Tool"
+        },
+        "parameters": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [
+            "input"
+          ],
+          "schema": [
+            {
+              "id": "input",
+              "displayName": "input",
+              "defaultMatch": false,
+              "required": false,
+              "display": true,
+              "type": "string",
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1,
+      "position": [
+        448,
+        176
+      ],
+      "id": "d1728b43-7d76-46e9-b134-a2825bed8e0b",
+      "name": "mlx",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "pJJnmU5jtm3CWWuy",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mcp-gateway",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9357678c-8bab-48db-b5bc-215a1ab60429",
+      "name": "Webhook",
+      "webhookId": "e77c4cbd-c7fe-4d0f-87c5-8f769646f298",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "path": "mcp-gateway",
+        "instructions": "You are the MCP Gateway for an AI Infrastructure Operations system.\n\nYour job is to receive MCP tool requests from specialized AI agents and route each request to the appropriate backend MCP tool.\n\nAvailable MCP services:\n\n1. Jira\n- Use for creating, reading, updating, or managing Jira issues.\n\n2. Monitoring\n- Use for infrastructure health, service status, node health, metrics, logs, and system monitoring.\n\n3. GitHub\n- Use for GitHub repositories, issues, pull requests, and repository-related operations.\n\n4. LLM\n- Use for LLM inference infrastructure, model status, cluster health, resource usage, and inference operations.\n\nRouting rules:\n- Jira requests → Jira MCP tools\n- Monitoring requests → Monitoring MCP tools\n- GitHub requests → GitHub MCP tools\n- LLM requests → LLM MCP tools\n\nPass the relevant request parameters to the selected MCP tool without changing their meaning.\n\nDo not invent results, issue IDs, repository information, monitoring data, or LLM status.\n\nIf the requested MCP service or operation is unavailable, return the actual error clearly.\n\nThe MCP Gateway is a router. It does not perform the underlying Jira, GitHub, Monitoring, or LLM operation itself."
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2.1,
+      "position": [
+        -608,
+        -192
+      ],
+      "id": "1ba1189e-afca-4c61-8ab3-273fd4c1dbba",
+      "name": "MCP Server Trigger",
+      "webhookId": "454da7bf-a246-45c0-81e9-247312b9a78b"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/github-mcp",
+        "authentication": "bearerAuth",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        -384,
+        0
+      ],
+      "id": "df3816cc-f098-43d2-98a1-c2123c1772a0",
+      "name": "Github2",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "pJJnmU5jtm3CWWuy",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/Jira",
+        "authentication": "bearerAuth",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        -656,
+        16
+      ],
+      "id": "637c518f-dcde-4bc7-91a3-049b10e4b24f",
+      "name": "Jira1",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "pJJnmU5jtm3CWWuy",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Jira",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "monitoring",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Github",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "mlx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Github2": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jira1": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "2f2dfb89-0cff-4ac6-b157-22313177428f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41f96d952a9343c8f6bfb437d9fdf277bf5e9481e8f86e5d2a89fb987e21f5a0"
+  },
+  "nodeGroups": [],
+  "id": "E3MIBWKA7AYPGsQR",
+  "tags": []
+}

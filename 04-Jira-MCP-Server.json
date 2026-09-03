@@ -1,0 +1,90 @@
+{
+  "name": "04-Jira-MCP-Server",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "bearerAuth",
+        "path": "Jira"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 2.1,
+      "position": [
+        -496,
+        -16
+      ],
+      "id": "c3f87951-181a-4755-9251-e1f868d20393",
+      "name": "MCP Server Trigger",
+      "webhookId": "12171d61-9379-4195-ae74-eebb755f9b2e",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "pJJnmU5jtm3CWWuy",
+          "name": "Bearer Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create a Jira issue in the configured Jira project using the provided summary, description, issue type, and other issue fields.",
+        "project": {
+          "__rl": true,
+          "value": "10002",
+          "mode": "list",
+          "cachedResultName": "Agentic Workflow"
+        },
+        "issueType": {
+          "__rl": true,
+          "value": "10012",
+          "mode": "list",
+          "cachedResultName": "Task"
+        },
+        "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', `The short title of the Jira issue based on the user's request.`, 'string') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', `The detailed description of the Jira issue based on the user's request. Include the problem, relevant context, investigation steps, and any important details provided by the user.`, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.jiraTool",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        144
+      ],
+      "id": "6c704b80-16cf-4fd8-91b7-dc6577954c29",
+      "name": "Create an issue in Jira Software",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "xXR27GT3wjicpecS",
+          "name": "Jira SW Cloud account 4"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Create an issue in Jira Software": {
+      "ai_tool": [
+        [
+          {
+            "node": "MCP Server Trigger",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "a1c73a0b-f5a7-4c29-8192-0823b809b854",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41f96d952a9343c8f6bfb437d9fdf277bf5e9481e8f86e5d2a89fb987e21f5a0"
+  },
+  "nodeGroups": [],
+  "id": "jZHbyBOqviLWcc7l",
+  "tags": []
+}

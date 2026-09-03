@@ -1,0 +1,125 @@
+{
+  "name": "03-Jira-Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.request }}",
+        "options": {
+          "systemMessage": "You are the Jira Agent.\n\nYour job is to perform Jira operations.\n\nYou have access to Jira tools through the MCP Client.\n\nIMPORTANT:\nWhen the user requests a Jira operation such as creating, updating, retrieving, or modifying a Jira issue, you MUST use the MCP Client tool.\n\nDo not simply explain what you would do.\nDo not tell the user that you attempted the operation.\nActually call the available Jira MCP tool.\n\nFor creating an issue:\n- Use the project specified by the request.\n- Use the requested issue type. If none is specified, use Task.\n- Use the requested summary.\n- Use the requested description.\n- Use the requested priority. If none is specified, use Medium.\n\nIf all required information is already available, do not ask the user for it again.\n\nAfter the MCP tool successfully completes, return the Jira issue key and creation result.\n\nDo not call the DevOps Agent.\nDo not call yourself."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "40be4a01-1737-4b94-97c7-115d38ee081e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://subh30.app.n8n.cloud/mcp/mcp-gateway",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.4,
+      "position": [
+        512,
+        192
+      ],
+      "id": "18423a0e-914d-4b44-b180-c11d02c64c1c",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "request"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bb6507e5-3759-425c-bbc8-306cc707f064",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "model": "qwen/qwen3.8-27b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        176,
+        176
+      ],
+      "id": "f3b85e61-327e-4701-854b-e0704a3f78f3",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "HBIJnwe9G3brLbSU",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "079c70c7-f4c5-4e63-8156-908283a08a1e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "41f96d952a9343c8f6bfb437d9fdf277bf5e9481e8f86e5d2a89fb987e21f5a0"
+  },
+  "nodeGroups": [],
+  "id": "TEQ0ARkiVIoHebhY",
+  "tags": []
+}
